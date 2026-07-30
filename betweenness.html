@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIA · Betweenness por Equipo</title>
+
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/graph-theme.css">
+<link rel="stylesheet" href="css/charts.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+</head>
+<body>
+
+<header class="app-header">
+  <h1>Portal de Inteligencia del BIA — Gerencia de Operaciones</h1>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="guia.html">Guía de uso</a>
+    <a href="grafo-interdependencias.html">Interdependencias</a>
+    <a href="betweenness.html" class="activo">Betweenness por Equipo</a>
+    <a href="grafo-aplicativos.html">Aplicativos ↔ Salidas</a>
+    <a href="recursos-temporalidad.html">Temporalidad de Recursos</a>
+  </nav>
+</header>
+
+<div class="betweenness-shell">
+
+  <!-- ===================== PANEL IZQUIERDO: FILTROS ===================== -->
+  <aside class="panel-filtros">
+    <h2>Filtros</h2>
+    <input type="text" id="input-buscar" class="buscador" placeholder="Buscar por nombre…" style="margin-bottom:14px;">
+    <div class="filtro-grupo">
+      <h3>Categoría</h3>
+      <div class="filtro-opciones" id="filtro-categorias"></div>
+    </div>
+    <div class="filtro-grupo">
+      <h3>Cantidad a mostrar</h3>
+      <select id="select-topn" style="width:100%;">
+        <option value="15" selected>Top 15</option>
+        <option value="30">Top 30</option>
+        <option value="60">Top 60</option>
+        <option value="9999">Todos</option>
+      </select>
+    </div>
+  </aside>
+
+  <!-- ===================== CENTRO ===================== -->
+  <main class="panel-grafo">
+    <div class="intro-betweenness" id="intro-betweenness">
+      <h2 style="font-size:15px;margin-bottom:6px;">¿Qué es Betweenness centrality?</h2>
+      <p style="font-size:13px;line-height:1.6;margin:0 0 10px;color:var(--color-text);">
+        Mide, para cada nodo de la red, en qué proporción de los <strong>caminos más cortos</strong>
+        entre todos los demás pares de nodos ese nodo actúa de intermediario. Un valor alto no
+        significa simplemente "tiene muchas conexiones" (eso es <em>grado</em>): significa que si ese
+        nodo se cae, muchos caminos operativos que no tienen alternativa quedan cortados — es la
+        métrica de <strong>punto único de falla</strong> por excelencia.
+      </p>
+      <div class="formula-box">
+        <span class="formula">C<sub>B</sub>(v) = Σ<sub>s≠v≠t</sub>&nbsp; σ<sub>st</sub>(v) ⁄ σ<sub>st</sub></span>
+        <span class="formula-leyenda">σ<sub>st</sub> = cantidad de caminos más cortos entre <em>s</em> y <em>t</em>; σ<sub>st</sub>(v) = cuántos de esos caminos pasan por <em>v</em>. Normalizado sobre todos los pares posibles de la red.</span>
+      </div>
+      <p id="nota-metodologica" style="font-size:12.5px;line-height:1.6;margin:10px 0 0;color:var(--color-text-muted);"></p>
+    </div>
+    <div class="toolbar-grafo">
+      <strong style="font-size:13px;">Ranking — nivel Equipo</strong>
+      <span id="contador-elementos" style="margin-left:auto;font-size:12px;color:var(--color-text-muted);"></span>
+    </div>
+    <div id="betweenness-container" class="chart-container"></div>
+
+    <div class="leyenda" id="leyenda-betweenness"></div>
+
+    <div id="estado-carga" class="estado-carga">Cargando datos del BIA…</div>
+    <div id="estado-error" class="estado-error" style="display:none;">
+      <strong>No se pudo cargar la vista</strong>
+      <span class="mensaje-error"></span>
+    </div>
+  </main>
+
+  <!-- ===================== PANEL DERECHO: DETALLE ===================== -->
+  <aside class="panel-detalle" id="panel-detalle-body">
+    <div class="panel-vacio"><p>Hacé clic en una barra para ver el detalle acá.</p></div>
+  </aside>
+
+</div>
+
+<script src="js/core/data-loader.js"></script>
+<script src="js/core/search.js"></script>
+<script src="js/core/betweenness-render.js"></script>
+<script src="js/pages/init-betweenness.js"></script>
+
+</body>
+</html>

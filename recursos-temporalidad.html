@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIA · Temporalidad de Recursos</title>
+
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/graph-theme.css">
+<link rel="stylesheet" href="css/charts.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+</head>
+<body>
+
+<header class="app-header">
+  <h1>Portal de Inteligencia del BIA — Gerencia de Operaciones</h1>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="guia.html">Guía de uso</a>
+    <a href="grafo-interdependencias.html">Interdependencias</a>
+    <a href="betweenness.html">Betweenness por Equipo</a>
+    <a href="grafo-aplicativos.html">Aplicativos ↔ Salidas</a>
+    <a href="recursos-temporalidad.html" class="activo">Temporalidad de Recursos</a>
+  </nav>
+</header>
+
+<div class="recursos-shell">
+
+  <!-- ===================== PANEL IZQUIERDO: FILTROS ===================== -->
+  <aside class="panel-filtros">
+    <h2>Filtros</h2>
+    <div id="filtros-container"><!-- lo arma FilterPanelBuilder --></div>
+  </aside>
+
+  <!-- ===================== CENTRO ===================== -->
+  <main class="panel-grafo">
+    <div class="recursos-tabs">
+      <div class="vista-toggle" id="vista-toggle">
+        <button data-vista="timeline" class="activo" title="Un gráfico por tipo de recurso">Timeline (por tipo)</button>
+        <button data-vista="stream" title="Los 5 tipos apilados en una sola vista">Streamgraph (total)</button>
+      </div>
+
+      <span class="separador" style="width:1px;height:22px;background:var(--color-border);margin:0 8px;"></span>
+
+      <div class="control-grupo" id="control-modo">
+        Timeline:
+        <label style="display:flex;align-items:center;gap:4px;"><input type="radio" name="modo-timeline" value="totales" checked> Totales</label>
+        <label style="display:flex;align-items:center;gap:4px;"><input type="radio" name="modo-timeline" value="porcentual"> Porcentuales</label>
+      </div>
+
+      <span id="contador-elementos" style="margin-left:auto;font-size:12px;color:var(--color-text-muted);"></span>
+    </div>
+
+    <div id="timeline-container" class="chart-container"></div>
+    <div id="stream-container" class="chart-container" style="display:none;"></div>
+
+    <div id="estado-carga" class="estado-carga">Cargando datos del BIA…</div>
+    <div id="estado-error" class="estado-error" style="display:none;">
+      <strong>No se pudo cargar la vista</strong>
+      <span class="mensaje-error"></span>
+    </div>
+  </main>
+
+</div>
+
+<script src="js/core/data-loader.js"></script>
+<script src="js/core/timeline-streamgraph.js"></script>
+<script src="js/pages/init-recursos.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal de Inteligencia del BIA</title>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/charts.css">
+<style>
+  /* ============================================================
+     Landing page: hero + grilla de módulos. Paleta sobria (blancos,
+     grises, azul institucional — ver css/base.css), jerarquía tipográfica
+     explícita, espaciado generoso entre secciones, transiciones sutiles
+     y grilla responsive (auto-fit, sin breakpoints fijos).
+     ============================================================ */
+
+  body { background: var(--color-bg); }
+
+  .hero {
+    max-width: 1080px; margin: 0 auto; padding: 64px 24px 40px;
+  }
+  .hero-eyebrow {
+    font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--color-primary-light); margin: 0 0 14px;
+  }
+  .hero h1 {
+    font-size: clamp(26px, 4vw, 36px); font-weight: 700; letter-spacing: -0.015em;
+    color: var(--color-primary); margin: 0 0 18px; line-height: 1.15;
+  }
+  .hero p.subtitle {
+    font-size: 16px; font-weight: 400; line-height: 1.65; color: var(--color-text-muted);
+    max-width: 680px; margin: 0;
+  }
+
+  .section-divider {
+    max-width: 1080px; margin: 0 auto; padding: 0 24px;
+  }
+  .section-divider hr {
+    border: none; border-top: 1px solid var(--color-border); margin: 0;
+  }
+
+  .modulos {
+    max-width: 1080px; margin: 0 auto; padding: 48px 24px 88px;
+  }
+  .modulos-heading {
+    font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--color-text-muted); margin: 0 0 20px;
+  }
+
+  .tarjetas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 20px;
+  }
+
+  .tarjeta {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 22px 22px 20px;
+    text-decoration: none;
+    color: var(--color-text);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: box-shadow 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+  }
+  .tarjeta:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+    border-color: var(--color-primary-light);
+  }
+  .tarjeta .num {
+    font-size: 11px; font-weight: 700; color: var(--color-primary-light);
+    letter-spacing: 0.04em;
+  }
+  .tarjeta h2 {
+    font-size: 16.5px; font-weight: 600; color: var(--color-primary); margin: 0;
+  }
+  .tarjeta p {
+    font-size: 13.5px; line-height: 1.55; color: var(--color-text-muted); margin: 0;
+  }
+
+  @media (max-width: 560px) {
+    .hero { padding: 40px 18px 28px; }
+    .modulos { padding: 32px 18px 56px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <h1>Portal de Inteligencia del BIA — Gerencia de Operaciones</h1>
+  <nav>
+    <a href="index.html" class="activo">Inicio</a>
+    <a href="guia.html">Guía de uso</a>
+    <a href="grafo-interdependencias.html">Interdependencias</a>
+    <a href="betweenness.html">Betweenness por Equipo</a>
+    <a href="grafo-aplicativos.html">Aplicativos ↔ Salidas</a>
+    <a href="recursos-temporalidad.html">Temporalidad de Recursos</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <p class="hero-eyebrow">BIA de Procesos y Actividades · Gerencia Departamental de Operaciones</p>
+  <h1>Portal de Inteligencia del BIA</h1>
+  <p class="subtitle">Explorá el modelo de datos del Business Impact Analysis (BIA) de forma visual: dependencias, concentración de recursos, identificación de nodos críticos.</p>
+</section>
+
+<div class="section-divider"><hr></div>
+
+<section class="modulos">
+  <p class="modulos-heading">Módulos del portal</p>
+  <div class="tarjetas">
+    <a class="tarjeta" href="guia.html">
+      <span class="num">01</span>
+      <h2>Guía de uso</h2>
+      <p>Cómo leer cada vista, qué hace cada filtro y casos de uso paso a paso.</p>
+    </a>
+
+    <a class="tarjeta" href="grafo-interdependencias.html">
+      <span class="num">02</span>
+      <h2>Interdependencias</h2>
+      <p>Relación directa y agregada entre equipos (Por Equipo), o el flujo completo Unidad Organizativa → Salida → Entidades (Por Salidas).</p>
+    </a>
+
+    <a class="tarjeta" href="betweenness.html">
+      <span class="num">03</span>
+      <h2>Betweenness por Equipo</h2>
+      <p>Qué equipos BNA (relevados y no relevados), terceros y aplicativos actúan de intermediarios críticos, ponderado por criticidad (RTO).</p>
+    </a>
+
+    <a class="tarjeta" href="grafo-aplicativos.html">
+      <span class="num">04</span>
+      <h2>Aplicativos ↔ Salidas</h2>
+      <p>Qué aplicativos sostienen cada Salida, filtrable por RTO, Unidad Organizativa y Subproducto. Vista de Red o de flujo Sankey.</p>
+    </a>
+
+    <a class="tarjeta" href="recursos-temporalidad.html">
+      <span class="num">05</span>
+      <h2>Temporalidad de Recursos</h2>
+      <p>Personal, equipamiento, proveedores, almacenamiento y aplicativos críticos, distribuidos en las 5 franjas de recuperación.</p>
+    </a>
+  </div>
+</section>
+
+</body>
+</html>

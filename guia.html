@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de uso — Portal de Inteligencia del BIA</title>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/charts.css">
+<style>
+  .guia { max-width: 920px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  .guia p.lead { color: var(--color-text-muted); font-size: 15px; margin-bottom: 28px; }
+
+  .toc {
+    background: var(--color-surface); border: 1px solid var(--color-border);
+    border-radius: var(--radius); padding: 16px 20px; margin-bottom: 36px;
+    box-shadow: var(--shadow-sm);
+  }
+  .toc h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--color-text-muted); margin-bottom: 10px; }
+  .toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 24px; }
+  .toc li { font-size: 13px; margin-bottom: 6px; break-inside: avoid; }
+  .toc a { text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  section.bloque { margin-bottom: 48px; }
+  section.bloque > h2 {
+    font-size: 20px; padding-bottom: 8px; margin-bottom: 16px;
+    border-bottom: 2px solid var(--color-border);
+  }
+  section.bloque > h2 .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%; background: var(--color-primary);
+    color: #fff; font-size: 13px; margin-right: 10px; vertical-align: middle;
+  }
+
+  h3.caso { font-size: 15px; color: var(--color-text); margin: 28px 0 6px; }
+  h3.caso .etiqueta {
+    display: inline-block; font-size: 10px; text-transform: uppercase; letter-spacing: .03em;
+    background: var(--color-primary-light); color: #fff; padding: 2px 8px; border-radius: 10px;
+    margin-right: 8px; vertical-align: middle; position: relative; top: -1px;
+  }
+  p.objetivo { font-size: 13px; color: var(--color-text-muted); margin: 0 0 12px; font-style: italic; }
+
+  ol.pasos { margin: 0 0 14px; padding-left: 20px; font-size: 14px; }
+  ol.pasos li { margin-bottom: 5px; }
+  ol.pasos code, p code, li code {
+    background: #eef1f6; border: 1px solid var(--color-border); border-radius: 4px;
+    padding: 1px 5px; font-size: 12.5px; font-family: Consolas, monospace; color: var(--color-primary);
+  }
+
+  figure.captura {
+    margin: 14px 0 22px; border: 1px solid var(--color-border); border-radius: var(--radius);
+    overflow: hidden; box-shadow: var(--shadow-sm); background: var(--color-surface);
+  }
+  figure.captura img { display: block; width: 100%; height: auto; }
+  figure.captura figcaption {
+    font-size: 12px; color: var(--color-text-muted); padding: 8px 12px;
+    border-top: 1px solid var(--color-border); background: #fafbfc;
+  }
+
+  .callout {
+    border-left: 3px solid var(--color-primary-light); background: #eef4fa;
+    padding: 10px 14px; border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 13px; margin: 14px 0;
+  }
+  .callout.tip { border-left-color: #2e8b57; background: #eaf5ef; }
+  .callout.tip strong { color: #2e8b57; }
+  .callout strong { color: var(--color-primary); }
+
+  table.tabla-comparativa { width: 100%; border-collapse: collapse; font-size: 13px; margin: 16px 0 8px; }
+  table.tabla-comparativa th, table.tabla-comparativa td {
+    text-align: left; padding: 8px 10px; border: 1px solid var(--color-border); vertical-align: top;
+  }
+  table.tabla-comparativa th { background: #eef1f6; color: var(--color-primary); font-size: 12px; text-transform: uppercase; }
+
+  .grid-interfaz { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 16px 0; }
+  .grid-interfaz .item h4 { font-size: 13px; margin-bottom: 4px; color: var(--color-primary); }
+  .grid-interfaz .item p { font-size: 13px; margin: 0; color: var(--color-text-muted); }
+
+  .faq dt { font-weight: 600; font-size: 14px; margin-top: 16px; color: var(--color-text); }
+  .faq dd { margin: 4px 0 0; font-size: 13.5px; color: var(--color-text-muted); }
+
+  .badge-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <h1>Portal de Inteligencia del BIA — Gerencia de Operaciones</h1>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="guia.html" class="activo">Guía de uso</a>
+    <a href="grafo-interdependencias.html">Interdependencias</a>
+    <a href="betweenness.html">Betweenness por Equipo</a>
+    <a href="grafo-aplicativos.html">Aplicativos ↔ Salidas</a>
+    <a href="recursos-temporalidad.html">Temporalidad de Recursos</a>
+  </nav>
+</header>
+
+<div class="guia">
+
+  <h1 style="font-size:26px; margin-top:28px;">Guía de uso</h1>
+  <p class="lead">
+    Cómo interpretar y sacarle provecho a los módulos del portal — qué muestra cada uno,
+    cómo se lee la pantalla, y una serie de casos de uso concretos con capturas reales tomadas
+    sobre los datos vigentes del BIA de Procesos y Actividades (Gerencia Departamental de Operaciones).
+  </p>
+
+  <nav class="toc">
+    <h2>Contenido</h2>
+    <ol>
+      <li><a href="#que-es">Qué es este portal</a></li>
+      <li><a href="#dos-grafos">Los módulos disponibles</a></li>
+      <li><a href="#interfaz">Cómo se lee la pantalla</a></li>
+      <li><a href="#grafo2">Interdependencias (Por Equipo / Por Salidas)</a></li>
+      <li><a href="#grafo1">Aplicativos ↔ Salidas (Red / Sankey)</a></li>
+      <li><a href="#recursos">Temporalidad de Recursos</a></li>
+      <li><a href="#tips">Tips generales</a></li>
+      <li><a href="#faq">Preguntas frecuentes</a></li>
+    </ol>
+  </nav>
+
+  <!-- ============================================================ -->
+  <section class="bloque" id="que-es">
+    <h2><span class="num">1</span>Qué es este portal</h2>
+    <p>
+      El Portal de Inteligencia del BIA traduce el modelo de datos normalizado del Business Impact
+      Analysis (BIA) de Procesos y Actividades en cuatro módulos interactivos. En lugar de recorrer
+      planillas, permite explorar visualmente qué unidades dependen de qué otras, dónde se concentra
+      el riesgo estructural de la red, qué aplicativos sostienen cada salida, y cómo se distribuyen
+      en el tiempo los recursos necesarios para recuperar la operatoria.
+    </p>
+    <p>
+      Los datos provienen del Excel normalizado del BIA (141 salidas relevadas, 36 aplicativos,
+      13 Unidades Organizativas y 94 entidades — internas y externas) y se regeneran cada vez que
+      el relevamiento se actualiza (ver <a href="#faq">Preguntas frecuentes</a>). Última actualización
+      de datos: 27/07/2026.
+    </p>
+    <div class="callout">
+      <strong>Medio Electrónico de Pagos y Transmisiones Internas cuentan como 1 equipo cada uno.</strong>
+      El Excel de origen los relevó separados por turno (T.M / T.T, mañana/tarde), pero operativamente
+      son el mismo equipo. El portal los fusiona en todas partes — nodos, filtros, Recursos y
+      Betweenness — así que donde antes se veían 4 equipos ahora se ven 2: "Medio Electrónico de
+      Pagos" y "Transmisiones Internas".
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="bloque" id="dos-grafos">
+    <h2><span class="num">2</span>Los módulos disponibles</h2>
+    <table class="tabla-comparativa">
+      <tr>
+        <th style="width:20%">Módulo</th>
+        <th style="width:38%">Qué muestra</th>
+        <th>Cuándo conviene usarlo</th>
+      </tr>
+      <tr>
+        <td><strong>Interdependencias</strong></td>
+        <td>Relación directa y agregada entre equipos (Por Equipo, vista por defecto), o el flujo completo Unidad Organizativa → Salida → Entidades (Por Salidas).</td>
+        <td>Para ver de un vistazo qué tan fuerte es la relación entre dos equipos, o para trazar una cadena operativa de punta a punta.</td>
+      </tr>
+      <tr>
+        <td><strong><a href="betweenness.html">Betweenness por Equipo</a></strong></td>
+        <td>Qué Equipos BNA (relevados y no relevados), Terceros y Aplicativos actúan como intermediarios estructurales de toda la red del BIA, ponderado por criticidad (RTO).</td>
+        <td>Para responder "¿cuáles son los puntos únicos de falla de la organización, más allá de una salida puntual?". El propio módulo explica el concepto y la fórmula al principio de la página — no requiere un caso de uso aparte acá.</td>
+      </tr>
+      <tr>
+        <td><strong>Aplicativos ↔ Salidas</strong></td>
+        <td>Relación directa entre cada salida y los aplicativos que la sostienen (305 relaciones), en vista de Red o de flujo Sankey.</td>
+        <td>Para responder "¿de qué sistemas depende esta salida?" o, a la inversa, "¿qué se cae si este aplicativo falla?".</td>
+      </tr>
+      <tr>
+        <td><strong>Temporalidad de Recursos</strong></td>
+        <td>Personal Clave, Equipamiento de Oficina, Equipamiento Especial, Proveedores, Almacenamiento y Aplicativos críticos, distribuidos en las 5 franjas de recuperación.</td>
+        <td>Para dimensionar qué recursos hacen falta, y cuándo, para sostener la continuidad operativa.</td>
+      </tr>
+    </table>
+    <div class="callout">
+      <strong>En una frase:</strong> Interdependencias muestra las <em>dependencias operativas y de
+      negocio</em>; Betweenness, <em>dónde está el riesgo estructural</em>; Aplicativos↔Salidas, las
+      <em>dependencias tecnológicas</em>; Temporalidad de Recursos, <em>qué hace falta y cuándo</em>
+      para recuperarse. Se complementan — no reemplazan al informe del BIA, lo hacen navegable.
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="bloque" id="interfaz">
+    <h2><span class="num">3</span>Cómo se lee la pantalla</h2>
+    <p>Los módulos con grafo (Interdependencias, Betweenness, Aplicativos↔Salidas) comparten la misma estructura de tres columnas; Temporalidad de Recursos usa un layout de dos columnas (filtros + gráficos) porque no es un grafo de nodos y aristas.</p>
+    <div class="grid-interfaz">
+      <div class="item">
+        <h4>Panel izquierdo — Filtros</h4>
+        <p>Casillas agrupadas por dimensión. Tildar varias opciones dentro de un mismo grupo las combina con <strong>"o"</strong> (ej. UO=A o UO=B); combinar filtros de distintos grupos los combina con <strong>"y"</strong>.</p>
+      </div>
+      <div class="item">
+        <h4>Centro — Lienzo y barra de herramientas</h4>
+        <p>Buscador de nodos por nombre, layouts/vistas (varían por módulo, ver cada sección), zoom, botón "Ajustar", toggle de etiquetas, "Ocultar aislados" (activo por defecto) y exportación a PNG. El contador arriba a la derecha muestra cuántos elementos quedan visibles con los filtros activos.</p>
+      </div>
+      <div class="item">
+        <h4>Panel derecho — Detalle</h4>
+        <p>Al hacer clic en cualquier nodo (o, en la Vista por Equipo, en una flecha) se abre su ficha con los datos relacionados. Si un dato no fue relevado, se indica explícitamente "Sin datos en el modelo" en vez de dejarlo vacío.</p>
+      </div>
+      <div class="item">
+        <h4>Leyenda</h4>
+        <p>Abajo a la izquierda del lienzo (o a la derecha, en Betweenness). Indica qué forma/color corresponde a cada tipo de nodo o categoría.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="bloque" id="grafo2">
+    <h2><span class="num">4</span>Interdependencias</h2>
+
+    <figure class="captura">
+      <img src="assets/guia/g2-por-equipo.png" alt="Vista Por Equipo de Interdependencias, mostrando 13 UO y 94 equipos/terceros conectados por el grosor de la relación">
+      <figcaption>Vista Por Equipo (default del módulo): 13 UO y 94 equipos/terceros visibles, layout Force.</figcaption>
+    </figure>
+    <p>
+      Este módulo tiene dos vistas, seleccionables desde el toolbar. <strong>Por Equipo es la vista por
+      defecto</strong> (más legible, sin el detalle de cada Salida individual); Por Salidas queda un clic
+      atrás para cuando hace falta el detalle operativo.
+    </p>
+    <table class="tabla-comparativa">
+      <tr><th style="width:16%">Vista</th><th>Qué muestra</th></tr>
+      <tr><td><strong>Por Equipo</strong> (default)</td><td>Colapsa la Salida: relación directa entre dos equipos (UO o Entidad), con el grosor de la flecha proporcional a la cantidad de Salidas que sostienen esa relación. Reemplaza al viejo checkbox "Mostrar Salidas", que al destildarse dejaba la pantalla vacía.</td></tr>
+      <tr><td><strong>Por Salidas</strong></td><td>El grafo original: tres capas (UO → Salida → Entidad) con la Salida como nodo intermedio. Más detalle, más denso.</td></tr>
+    </table>
+    <p>Layouts disponibles, en este orden: <strong>Force</strong> (default), <strong>Breadthfirst</strong> (jerárquico, ideal para "Por Salidas"), <strong>Concentric</strong> y <strong>Circle</strong>.</p>
+
+    <h3 class="caso"><span class="etiqueta">Caso 1</span>Ver la fuerza de la relación entre dos equipos, sin el detalle de cada Salida</h3>
+    <p class="objetivo">Objetivo: responder rápido "¿qué tan fuerte depende el Equipo A del Equipo B?", sin tener que contar Salidas una por una.</p>
+    <ol class="pasos">
+      <li>Es la vista con la que arranca el módulo (<strong>Por Equipo</strong>). Las flechas más gruesas son las relaciones más fuertes (más Salidas en común).</li>
+      <li>Click sobre una flecha para ver el detalle: cantidad exacta y el listado de Salidas que la sostienen.</li>
+      <li>Los filtros de esta vista son más simples (solo UO y Mostrar internas/externas) porque ya no hay Salida individual que filtrar por RTO o Subproducto — para eso, pasar a "Por Salidas".</li>
+    </ol>
+
+    <h3 class="caso"><span class="etiqueta">Caso 2</span>Trazar el flujo completo de una salida</h3>
+    <p class="objetivo">Objetivo: ver, para una salida puntual, quién le provee información (predecesoras) y hacia dónde va el resultado (sucesoras) — la cadena de punta a punta.</p>
+    <ol class="pasos">
+      <li>Click en <strong>Por Salidas</strong> en el selector de vista del toolbar.</li>
+      <li>Click directo sobre el nodo de la salida (círculo azul) que interesa analizar.</li>
+      <li>El panel derecho separa <strong>Entidades destino (sucesoras)</strong> de <strong>Entidades origen (predecesoras)</strong>, además de la UO, el RTO, la frecuencia y los aplicativos que la sostienen.</li>
+    </ol>
+    <figure class="captura">
+      <img src="assets/guia/g2-detalle-salida.png" alt="Panel de detalle de la salida Nacha, con su UO, RTO, subproductos, aplicativos y entidades relacionadas">
+      <figcaption>Detalle de la Salida "Nacha": UO Compensación de Valores e Inhabilitados, RTO 2 a 4 horas, aplicativo CH, sucesora COELSA. Útil para entender el impacto de una demora aguas arriba o aguas abajo.</figcaption>
+    </figure>
+
+    <h3 class="caso"><span class="etiqueta">Caso 3</span>Aislar solo las dependencias internas (Por Salidas)</h3>
+    <p class="objetivo">Objetivo: entender qué áreas propias del Banco dependen entre sí, sin el ruido de proveedores y organismos externos.</p>
+    <ol class="pasos">
+      <li>En Por Salidas, destildar <strong>Mostrar entidades externas</strong> en el panel de filtros.</li>
+      <li>Click en <strong>Ajustar</strong>.</li>
+    </ol>
+    <p>El mismo criterio, invertido (destildar <strong>Mostrar entidades internas</strong>), sirve para dimensionar la exposición a terceros. En la vista Por Equipo existe el mismo toggle, más simple de leer porque no hay Salidas individuales de por medio.</p>
+
+    <h3 class="caso"><span class="etiqueta">Caso 4</span>Medir la exposición a un proveedor externo clave</h3>
+    <p class="objetivo">Objetivo: dimensionar cuánta operatoria del Banco depende de una entidad externa puntual — insumo directo para el análisis de riesgo de terceros.</p>
+    <ol class="pasos">
+      <li>Ubicar la entidad externa (hexágono rojo en Por Salidas, o nodo rojo en Por Equipo) — con el buscador si el nombre se conoce, por ejemplo <code>COELSA</code>.</li>
+      <li>Click sobre el nodo para abrir su ficha, o sobre una flecha (en Por Equipo) para ver el detalle agregado.</li>
+    </ol>
+    <figure class="captura">
+      <img src="assets/guia/g2-detalle-entidad.png" alt="Panel de detalle de la entidad externa COELSA, con las salidas y Unidades Organizativas relacionadas">
+      <figcaption>Detalle de COELSA: 4 salidas (Nacha, MEP, Feriados, Pago de Facturas COELSA, Cobertura Posición - DEBIN) y 4 Unidades Organizativas dependen de esta entidad externa.</figcaption>
+    </figure>
+    <div class="callout tip"><strong>Cuándo usar cada vista:</strong> "Por Equipo" (default) para una lectura ejecutiva rápida de quién depende de quién y cuánto; "Por Salidas" cuando hace falta el detalle operativo (qué Salida puntual, con qué RTO, qué Subproducto).</div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="bloque" id="grafo1">
+    <h2><span class="num">5</span>Aplicativos ↔ Salidas</h2>
+
+    <p>
+      El toolbar tiene dos vistas: <strong>Red</strong> (Cytoscape) y <strong>Sankey</strong> (diagrama de
+      flujo). Los layouts/vistas están en este orden: <strong>Force</strong> (default) → <strong>Sankey</strong> → <strong>Concentric</strong> → <strong>Circle</strong>.
+      Los casos 1 a 4 son válidos para la vista Red; el Caso 5 muestra cuándo conviene el Sankey.
+    </p>
+
+    <h3 class="caso"><span class="etiqueta">Caso 1</span>Ver qué sostiene a las salidas más críticas</h3>
+    <p class="objetivo">Objetivo: identificar los aplicativos de los que depende la operatoria con menor tolerancia a interrupción (RTO más bajo).</p>
+    <ol class="pasos">
+      <li>En el panel de filtros, dentro de <strong>Rango de RTO (criticidad)</strong>, tildar <code>2 a 4 horas</code>.</li>
+      <li>Click en <strong>Ajustar</strong> para recentrar la vista sobre el subconjunto resultante.</li>
+    </ol>
+    <figure class="captura">
+      <img src="assets/guia/g1-filtro-rto.png" alt="Grafo filtrado por RTO 2 a 4 horas, mostrando 43 salidas y 17 aplicativos">
+      <figcaption>Filtro RTO = "2 a 4 horas" activo: 43 salidas y 17 aplicativos visibles. Los aplicativos aislados (sin conexión a ninguna salida de este rango) se ocultan solos por el default "Ocultar aislados".</figcaption>
+    </figure>
+
+    <h3 class="caso"><span class="etiqueta">Caso 2</span>Detectar aplicativos que concentran riesgo</h3>
+    <p class="objetivo">Objetivo: encontrar puntos únicos de falla — aplicativos de los que depende un número desproporcionado de salidas.</p>
+    <ol class="pasos">
+      <li>Sin filtros activos, hacer click directamente sobre un nodo con muchas conexiones (rombo verde con muchas líneas).</li>
+      <li>El panel derecho muestra la <strong>cantidad de salidas relacionadas</strong>, las Unidades Organizativas que las usan y el RTO mínimo asociado.</li>
+    </ol>
+    <figure class="captura">
+      <img src="assets/guia/g1-detalle-aplicativo.png" alt="Panel de detalle del aplicativo CU, mostrando 33 salidas relacionadas en 6 Unidades Organizativas distintas">
+      <figcaption>Detalle del aplicativo "CU": 33 salidas relacionadas en 6 Unidades Organizativas (Compensación de Valores e Inhabilitados, Servicios Especiales y Oficios, Retenciones/Percepciones de Gravámenes, Apoyo Mercado de Capitales, Transmisiones Internas, Centro de Transferencias Electrónicas), con RTO mínimo de 2 a 4 horas. Una falla ahí impacta transversalmente.</figcaption>
+    </figure>
+    <div class="callout">
+      <strong>Nota:</strong> "M365 (Excel/Office)" aparece con aún más conexiones, pero al ser una
+      herramienta de uso general no es comparable como riesgo puntual con un aplicativo específico
+      como "CU": conviene leer la cantidad de salidas relacionadas junto con qué tan específico es
+      el aplicativo antes de sacar conclusiones. Por eso el módulo <a href="betweenness.html">Betweenness por Equipo</a>
+      directamente lo excluye de su cálculo — acá, en cambio, se muestra con normalidad.
+    </div>
+
+    <h3 class="caso"><span class="etiqueta">Caso 3</span>Buscar un aplicativo o salida por nombre</h3>
+    <p class="objetivo">Objetivo: ubicar rápidamente un nodo puntual sin recorrer visualmente todo el grafo.</p>
+    <ol class="pasos">
+      <li>Escribir en el buscador (arriba a la izquierda del lienzo), por ejemplo <code>Transactor</code>.</li>
+      <li>Los nodos que matchean quedan resaltados en amarillo; el resto se atenúa automáticamente.</li>
+    </ol>
+    <figure class="captura">
+      <img src="assets/guia/g1-busqueda.png" alt="Resultado de buscar 'Transactor' en el grafo, con el nodo resaltado en amarillo">
+      <figcaption>Búsqueda por texto parcial, sin distinguir mayúsculas ni acentos.</figcaption>
+    </figure>
+
+    <h3 class="caso"><span class="etiqueta">Caso 4</span>Foco en una Unidad Organizativa puntual</h3>
+    <p class="objetivo">Objetivo: ver, para un área específica, qué aplicativos usa y cuántas salidas produce — útil antes de una reunión de relevamiento o de un cambio de sistema.</p>
+    <ol class="pasos">
+      <li>En <strong>Unidad Organizativa</strong>, tildar la unidad de interés.</li>
+      <li>Click en <strong>Ajustar</strong>. Se puede combinar con el filtro de RTO para acotar aún más.</li>
+    </ol>
+
+    <h3 class="caso"><span class="etiqueta">Caso 5</span>Ver el flujo de una UO como Sankey</h3>
+    <p class="objetivo">Objetivo: ver de un vistazo dónde se concentran los flujos más gruesos entre Salidas y Aplicativos, para una Unidad Organizativa a la vez — la vista completa sin filtrar es ilegible (126+ salidas).</p>
+    <ol class="pasos">
+      <li>Click en el botón <strong>Sankey</strong> (segunda opción del toolbar).</li>
+      <li>Por defecto se muestra <strong>una sola UO</strong> — la de mayor cantidad de salidas — para que sea legible desde el primer vistazo. Un desplegable arriba a la derecha permite elegir otra UO puntual.</li>
+      <li>Si necesitás la vista completa (más compleja, con las 13 UO a la vez), elegí <strong>"Todas las UO (complejiza la vista)"</strong> en ese mismo desplegable.</li>
+      <li>El grosor de cada franja es la cantidad de relaciones; pasar el mouse muestra el detalle, y click en un nodo abre su ficha en el panel derecho (igual que en la Red).</li>
+    </ol>
+    <figure class="captura">
+      <img src="assets/guia/g1-sankey-default.png" alt="Vista Sankey por defecto, mostrando la UO Servicios Especiales y Oficios con 22 salidas y 8 aplicativos">
+      <figcaption>Sankey por defecto: arranca en "Servicios Especiales y Oficios" (la UO con más salidas), 22 salidas · 8 aplicativos visibles. Cambiar la UO desde el desplegable arriba a la derecha.</figcaption>
+    </figure>
+    <div class="callout tip"><strong>Los aislados nunca aparecen acá.</strong> Al ser un diagrama de flujo, un nodo sin ninguna relación simplemente no genera franja — no hace falta tildar nada para que no aparezca.</div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="bloque" id="recursos">
+    <h2><span class="num">6</span>Temporalidad de Recursos</h2>
+    <p>
+      Este módulo muestra qué recursos (Personal Clave, Equipamiento de Oficina, Equipamiento Especial,
+      Proveedores, Almacenamiento/Repositorios y Aplicativos) hacen falta para sostener
+      la operatoria, y en qué franja de tiempo desde la interrupción (las 5 franjas de
+      <code>Dim_RangoTiempo_Recursos</code>: &lt;2h, 2-12h, 12-24h, 24-72h, &gt;72h). No es un grafo:
+      tiene dos vistas.
+    </p>
+    <table class="tabla-comparativa">
+      <tr><th style="width:16%">Vista</th><th>Qué muestra</th><th>Cuándo conviene</th></tr>
+      <tr>
+        <td><strong>Timeline (por tipo)</strong></td>
+        <td>Un mini-gráfico de barras por cada uno de los 6 tipos de recurso, apiladas por Unidad Organizativa, en las 5 franjas.</td>
+        <td>Para ver el detalle de un tipo puntual sin que los recursos con pocos registros (ej. Equipamiento Especial) queden invisibles al lado de los más grandes (ej. Personal Clave).</td>
+      </tr>
+      <tr>
+        <td><strong>Streamgraph (total)</strong></td>
+        <td>Los 6 tipos apilados en una sola silueta continua.</td>
+        <td>Para una lectura ejecutiva de un vistazo: cómo se reparte el total de recursos entre franjas, sin entrar al detalle de cada tipo.</td>
+      </tr>
+    </table>
+    <figure class="captura">
+      <img src="assets/guia/recursos-timeline.png" alt="Vista Timeline de Temporalidad de Recursos, con un mini-gráfico apilado por cada uno de los 6 tipos de recurso">
+      <figcaption>Vista Timeline: un mini-gráfico de barras apiladas por UO, por cada tipo de recurso — incluido "Aplicativos", el tipo agregado en esta revisión.</figcaption>
+    </figure>
+    <div class="callout">
+      <strong>Aplicativos (6to tipo, nuevo)</strong> viene de <code>Fact_AplicativosCriticidad</code>:
+      qué aplicativos necesita cada UO tener disponibles, y en qué franja. <strong>Proveedores</strong>
+      incluye la totalidad de proveedores relevados en <code>Fact_Proveedores</code> (no solo los
+      marcados "Servicio Crítico" — esa columna no se usa como filtro acá, el módulo ya mostraba todos).
+    </div>
+
+    <h3 class="caso"><span class="etiqueta">Caso 1</span>Dimensionar el personal necesario en las primeras horas</h3>
+    <p class="objetivo">Objetivo: saber cuánto Personal Clave hace falta tener disponible en la franja más urgente (&lt;2 horas).</p>
+    <ol class="pasos">
+      <li>Vista <strong>Timeline</strong>, modo <strong>Totales</strong> (default).</li>
+      <li>Mirar la tarjeta "Personal Clave", barra de la franja "&lt; 2 horas". Cada color es una UO distinta (ver colores en el gráfico).</li>
+      <li>Pasar el mouse sobre un segmento de color para ver el detalle exacto por UO.</li>
+    </ol>
+
+    <h3 class="caso"><span class="etiqueta">Caso 2</span>Ver si un recurso está concentrado en una sola franja</h3>
+    <p class="objetivo">Objetivo: entender si un tipo de recurso (ej. Almacenamiento) necesita resolverse todo temprano, o se puede escalonar.</p>
+    <ol class="pasos">
+      <li>Cambiar a modo <strong>Porcentuales</strong> con el selector de radio botones.</li>
+      <li>Un tipo con una sola barra cerca del 100% está concentrado en esa franja; un tipo con barras repartidas está más escalonado en el tiempo.</li>
+    </ol>
+
+    <h3 class="caso"><span class="etiqueta">Caso 3</span>Foco en una Unidad Organizativa puntual</h3>
+    <ol class="pasos">
+      <li>En el panel de filtros, tildar la UO de interés.</li>
+      <li>Los 6 tipos de recurso se recalculan solo con los registros de esa UO.</li>
+    </ol>
+
+    <h3 class="caso"><span class="etiqueta">Caso 4</span>Ver qué aplicativos críticos necesita una UO y cuándo</h3>
+    <p class="objetivo">Objetivo: cruzar la lógica de Aplicativos↔Salidas (qué sistema sostiene qué) con la ventana de tiempo en la que ese aplicativo necesita estar disponible.</p>
+    <ol class="pasos">
+      <li>Filtrar por la UO de interés, igual que en el Caso 3.</li>
+      <li>Mirar la tarjeta "Aplicativos": qué aplicativos aparecen en qué franja, y con qué peso relativo (modo Porcentuales).</li>
+    </ol>
+
+    <h3 class="caso"><span class="etiqueta">Caso 5</span>Ver el reparto total entre franjas de un vistazo</h3>
+    <ol class="pasos">
+      <li>Click en <strong>Streamgraph (total)</strong>.</li>
+      <li>El ancho vertical de cada franja de color es proporcional a la cantidad de ese tipo de recurso en esa ventana de tiempo. Pasar el mouse muestra el total del tipo con el filtro activo.</li>
+    </ol>
+    <figure class="captura">
+      <img src="assets/guia/recursos-streamgraph.png" alt="Vista Streamgraph de Temporalidad de Recursos, con los 6 tipos apilados en una silueta continua a lo largo de las 5 franjas">
+      <figcaption>Streamgraph: los 6 tipos de recurso apilados en una sola silueta a lo largo de las 5 franjas temporales.</figcaption>
+    </figure>
+    <div class="callout tip"><strong>Proveedores, Almacenamiento y Aplicativos no tienen una "cantidad" propia en el Excel</strong> (solo un check de "Aplica" por franja): en este módulo cada fila marcada cuenta como 1 recurso que necesita estar recuperado en esa franja — es la unidad de medida más honesta que permite el dato de origen.</div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="bloque" id="tips">
+    <h2><span class="num">7</span>Tips generales</h2>
+    <div class="callout tip"><strong>Combiná filtros progresivamente.</strong> Es más fácil partir de un filtro amplio (una UO o un RTO) y agregar el segundo criterio después de ver el resultado, que tildar todo de entrada.</div>
+    <div class="callout tip"><strong>"Ocultar aislados" ya viene activo.</strong> Todo el portal muestra por defecto solo lo que tiene relación. Si necesitás ver también los elementos sin ninguna conexión dentro del filtro elegido (por ejemplo, para detectar aplicativos que quedaron sin ninguna Salida asociada), destildá esa casilla donde esté disponible.</div>
+    <div class="callout tip"><strong>Los defaults son un punto de partida legible, no un límite.</strong> El Sankey arranca con una sola UO, Interdependencias arranca en "Por Equipo" y Betweenness arranca en Top 15 — en los tres casos hay un control a mano (desplegable, toggle de vista, o "Cantidad a mostrar") para complejizar la vista apenas haga falta.</div>
+    <div class="callout tip"><strong>Exportar imagen sirve para informes.</strong> El botón "Exportar imagen" genera un PNG del estado actual del grafo (con los filtros aplicados) — útil para pegar en una presentación o en un mail sin depender de que el destinatario abra el portal. En la vista Sankey, usar clic derecho → "Guardar imagen como" sobre el diagrama.</div>
+    <div class="callout tip"><strong>Los nodos se pueden arrastrar.</strong> Si el layout automático deja dos nodos superpuestos, se puede reacomodar manualmente arrastrando; y con clic + arrastre sobre el fondo se seleccionan varios nodos a la vez.</div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="bloque" id="faq">
+    <h2><span class="num">8</span>Preguntas frecuentes</h2>
+    <dl class="faq">
+      <dt>¿Por qué un campo dice "Sin datos en el modelo"?</dt>
+      <dd>El panel de detalle nunca completa información que no fue relevada. Si un campo aparece así, significa que ese dato no está cargado en el Excel de origen para ese nodo — no es un error del portal.</dd>
+
+      <dt>¿Los datos se actualizan solos?</dt>
+      <dd>No. El portal lee archivos JSON estáticos generados a partir del Excel normalizado del BIA. Cuando el relevamiento se actualiza, hay que correr <code>python3 tools/excel_to_json.py &lt;ruta al Excel&gt;</code> y volver a publicar el portal; no hay una conexión en vivo a ninguna base de datos.</dd>
+
+      <dt>¿Por qué antes veía 15 Unidades Organizativas y ahora veo 13?</dt>
+      <dd>"Medio Electrónico de Pagos T.M/T.T" y "Transmisiones Internas T.M/T.T" se fusionaron en 1 equipo cada uno (son el mismo equipo en dos turnos, no cuatro equipos distintos). Ver la nota en <a href="#que-es">Qué es este portal</a>.</dd>
+
+      <dt>¿Por qué Aplicativos↔Salidas no distingue Unidad Organizativa en los aplicativos?</dt>
+      <dd>Porque un aplicativo puede ser usado por varias UO al mismo tiempo — pertenece al modelo, no a un área en particular. Para ver qué UO usan un aplicativo puntual, hacé clic en su nodo: el panel derecho las lista.</dd>
+
+      <dt>¿Qué significa que una entidad sea "sin clasificar" en la Vista Por Salidas de Interdependencias?</dt>
+      <dd>Un grupo reducido de entidades (16 sobre 94) no tiene definido si son internas o externas en el Excel de origen. Ahí quedan siempre visibles, coloreadas en gris, salvo que se oculten indirectamente al tildar "Ocultar aislados". En Betweenness y en la Vista Por Equipo de Interdependencias, en cambio, sí se clasificaron 1x1 (ver la nota metodológica dentro del propio módulo de <a href="betweenness.html">Betweenness por Equipo</a>) porque esos módulos necesitan una categoría binaria para tener sentido.</dd>
+
+      <dt>¿Por qué no hay una sección dedicada a Betweenness en esta guía?</dt>
+      <dd>Porque no hace falta duplicarla: el módulo explica el concepto, la fórmula y la metodología (ponderación por RTO, exclusión de M365) directamente al principio de su propia página. Acá solo aparece resumido en la tabla de <a href="#dos-grafos">módulos disponibles</a>, con el link directo.</dd>
+
+      <dt>¿Puedo ver dos módulos al mismo tiempo?</dt>
+      <dd>No en la misma pantalla — son vistas independientes, pensadas para preguntas distintas (ver <a href="#dos-grafos">Los módulos disponibles</a>). Se navega de uno a otro desde el menú superior.</dd>
+    </dl>
+  </section>
+
+</div>
+</body>
+</html>

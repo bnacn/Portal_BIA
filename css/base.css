@@ -1,0 +1,77 @@
+/**
+ * base.css
+ * Reset mínimo + tipografía + paleta de color corporativa del portal.
+ * Pensado para un entorno bancario: tonos sobrios, alto contraste, sin
+ * elementos decorativos innecesarios.
+ */
+
+:root {
+  /* Paleta corporativa */
+  --color-bg: #f4f6f9;
+  --color-surface: #ffffff;
+  --color-border: #dde2ea;
+  --color-text: #1a1a2e;
+  --color-text-muted: #5c6474;
+  --color-primary: #0d3b66;      /* azul institucional oscuro */
+  --color-primary-light: #145da0;
+  --color-accent: #ff6b35;       /* resaltes de selección */
+  --color-warning: #ffd23f;      /* resaltes de búsqueda */
+
+  /* Colores por tipo de entidad del modelo (consistentes en todo el portal) */
+  --color-salida: #145da0;
+  --color-aplicativo: #2e8b57;
+  --color-uo: #6a3d9a;
+  --color-entidad-interna: #b8860b;
+  --color-entidad-externa: #c0392b;
+  --color-entidad-otros: #7f8c8d;
+
+  --radius: 6px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 14px;
+}
+
+h1, h2, h3, h4 { margin: 0 0 8px; font-weight: 600; color: var(--color-primary); }
+
+a { color: var(--color-primary-light); }
+
+button {
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-radius: var(--radius);
+  padding: 6px 10px;
+  transition: background 0.15s, border-color 0.15s;
+}
+button:hover { background: #eef1f6; border-color: var(--color-primary-light); }
+button.activo { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+
+input[type="text"], select {
+  font-family: inherit;
+  font-size: 13px;
+  padding: 6px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text);
+  width: 100%;
+}
+
+label { font-size: 12px; color: var(--color-text-muted); }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #c6ccd6; border-radius: 4px; }

@@ -1,0 +1,21 @@
+/**
+ * graph-theme.css
+ * Estilos que dependen del "tipo" de nodo/entidad del modelo BIA, pero que
+ * no pueden vivir dentro del canvas de Cytoscape (ej. el badge del panel
+ * lateral, la leyenda). Los colores están duplicados como variables CSS
+ * (ver base.css) y como valores planos en cada *.config.js porque
+ * Cytoscape no puede leer variables CSS en su stylesheet interno: es la
+ * única duplicación intencional del proyecto, documentada acá.
+ */
+
+.panel-badge.tipo-salida { background: var(--color-salida); }
+.panel-badge.tipo-aplicativo { background: var(--color-aplicativo); }
+.panel-badge.tipo-unidad_organizativa { background: var(--color-uo); }
+.panel-badge.tipo-entidad { background: var(--color-entidad-interna); }
+
+.leyenda-dot.tipo-salida { background: var(--color-salida); }
+.leyenda-dot.tipo-aplicativo { background: var(--color-aplicativo); }
+.leyenda-dot.tipo-unidad_organizativa { background: var(--color-uo); }
+.leyenda-dot.tipo-entidad-interna { background: var(--color-entidad-interna); }
+.leyenda-dot.tipo-entidad-externa { background: var(--color-entidad-externa); }
+.leyenda-dot.tipo-entidad-otros { background: var(--color-entidad-otros); }

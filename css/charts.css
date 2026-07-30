@@ -1,0 +1,88 @@
+/**
+ * charts.css
+ * Estilos compartidos por los módulos que NO usan Cytoscape (Sankey,
+ * Temporalidad de Recursos, Betweenness). Reutiliza las variables de
+ * base.css. No se toca graph-theme.css ni layout.css: esto es aditivo.
+ */
+
+/* ---- Bloque explicativo (ej. Betweenness): concepto + fórmula ---- */
+.intro-betweenness {
+  padding: 14px 18px; background: var(--color-surface); border-bottom: 1px solid var(--color-border);
+}
+.formula-box {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 14px;
+  background: #eef4fa; border-left: 3px solid var(--color-primary-light);
+  border-radius: 0 var(--radius) var(--radius) 0; padding: 10px 14px;
+}
+.formula-box .formula {
+  font-family: Consolas, 'Cambria Math', monospace; font-size: 15px; color: var(--color-primary);
+  white-space: nowrap;
+}
+.formula-box .formula-leyenda { font-size: 12px; color: var(--color-text-muted); line-height: 1.5; }
+
+
+.vista-toggle { display: flex; border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden; }
+.vista-toggle button {
+  border: none; border-radius: 0; border-right: 1px solid var(--color-border);
+  background: var(--color-surface); padding: 6px 12px;
+}
+.vista-toggle button:last-child { border-right: none; }
+.vista-toggle button.activo { background: var(--color-primary); color: #fff; }
+
+/* ---- Contenedor genérico de un chart D3 (Sankey / Timeline / Streamgraph / Betweenness) ---- */
+.chart-container { flex: 1; width: 100%; height: 100%; overflow: auto; padding: 8px; }
+.chart-container svg { display: block; }
+.chart-container .eje text { font-size: 10.5px; fill: var(--color-text-muted); }
+.chart-container .eje path, .chart-container .eje line { stroke: var(--color-border); }
+
+/* Tooltip flotante reutilizado por todos los charts D3 */
+.d3-tooltip {
+  position: fixed; pointer-events: none; z-index: 999;
+  background: #1a1a2e; color: #fff; font-size: 12px; line-height: 1.5;
+  padding: 8px 10px; border-radius: var(--radius); box-shadow: var(--shadow-md);
+  max-width: 320px; opacity: 0; transition: opacity 0.1s;
+}
+.d3-tooltip strong { display: block; margin-bottom: 2px; }
+.d3-tooltip .muted { color: #b7bdc9; }
+
+/* ---- Sankey ---- */
+.sankey-node rect { stroke: #fff; stroke-width: 1px; cursor: pointer; }
+.sankey-link { fill: none; stroke-opacity: 0.35; transition: stroke-opacity 0.12s; cursor: pointer; }
+.sankey-link:hover { stroke-opacity: 0.7; }
+.sankey-link.atenuado { stroke-opacity: 0.06; }
+.sankey-node.atenuado rect { opacity: 0.25; }
+.sankey-label { font-size: 10.5px; fill: var(--color-text); pointer-events: none; }
+
+/* ---- Módulo Temporalidad de Recursos ---- */
+.recursos-shell { display: grid; grid-template-columns: 280px 1fr; height: calc(100vh - 48px); }
+.recursos-tabs { display: flex; gap: 6px; padding: 8px 12px; background: var(--color-surface); border-bottom: 1px solid var(--color-border); align-items: center; flex-wrap: wrap; }
+.timeline-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 16px; padding: 12px; }
+.timeline-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 10px 12px 4px; }
+.timeline-card h3 { font-size: 13px; margin-bottom: 2px; }
+.timeline-card .subtitulo { font-size: 11px; color: var(--color-text-muted); margin-bottom: 6px; }
+.timeline-bar-track { fill: #eef1f6; }
+.streamgraph-shell { padding: 12px; }
+.streamgraph-shell h3 { font-size: 13px; }
+.stream-legend { display: flex; flex-wrap: wrap; gap: 10px; margin: 6px 0 10px; font-size: 12px; }
+.stream-legend-item { display: flex; align-items: center; gap: 5px; }
+.stream-legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+
+/* ---- Módulo Betweenness ---- */
+.betweenness-shell { display: grid; grid-template-columns: 260px 1fr 320px; height: calc(100vh - 48px); }
+.betweenness-bar-row { cursor: pointer; }
+.betweenness-bar-row rect { transition: opacity 0.1s; }
+.betweenness-bar-row:hover rect { opacity: 0.8; }
+.betweenness-bar-row text.valor { font-size: 10px; fill: var(--color-text-muted); }
+.betweenness-bar-row text.etiqueta { font-size: 11px; fill: var(--color-text); }
+.categoria-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #eef1f6; margin: 2px 4px 2px 0; }
+.categoria-chip .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+/* ---- Tarjetas de inicio (index.html) ---- */
+.tarjeta.tarjeta-destacada { border: 1px solid var(--color-primary-light); }
+.tarjeta .badge-nuevo {
+  font-size: 10px; text-transform: uppercase; background: var(--color-accent); color: #fff;
+  padding: 2px 6px; border-radius: 8px; margin-left: 6px; vertical-align: middle;
+}
+
+/* Controles de tipo "grupo de radios" reutilizados (Totales/Porcentuales, etc.) */
+.control-grupo { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text-muted); margin: 0 6px; }

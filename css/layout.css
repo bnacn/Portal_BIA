@@ -1,0 +1,143 @@
+/**
+ * layout.css
+ * Estructura general de página: header institucional, barra de filtros,
+ * lienzo del grafo y panel lateral de detalle. Layout con CSS Grid,
+ * responsive a partir de escritorio (entorno corporativo = desktop).
+ */
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+  position: relative;
+  gap: 20px;
+}
+.app-header h1 {
+  color: #fff; font-size: 15px; font-weight: 600; margin: 0;
+  white-space: nowrap; letter-spacing: 0.01em;
+}
+.app-header nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+.app-header nav a {
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 13px;
+  border-radius: 7px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+}
+.app-header nav a:hover {
+  background: rgba(255, 255, 255, 0.10);
+  color: #fff;
+}
+.app-header nav a.activo {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  font-weight: 600;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 280px 1fr 320px;
+  height: calc(100vh - 48px);
+}
+
+/* ---- Panel izquierdo: filtros ---- */
+.panel-filtros {
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  padding: 16px;
+  overflow-y: auto;
+}
+.panel-filtros h2 { font-size: 14px; margin-bottom: 12px; }
+.filtro-grupo { margin-bottom: 18px; }
+.filtro-grupo h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  margin-bottom: 6px;
+}
+.filtro-opciones { display: flex; flex-direction: column; gap: 4px; max-height: 180px; overflow-y: auto; }
+.filtro-opciones label { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--color-text); }
+
+/* ---- Centro: lienzo del grafo + toolbar ---- */
+.panel-grafo { position: relative; display: flex; flex-direction: column; background: #eef1f6; }
+
+.toolbar-grafo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+.toolbar-grafo .buscador { flex: 1; min-width: 180px; max-width: 320px; }
+.toolbar-grafo .separador { width: 1px; height: 22px; background: var(--color-border); margin: 0 4px; }
+
+#cy-container { flex: 1; width: 100%; height: 100%; }
+
+.leyenda {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  font-size: 12px;
+  box-shadow: var(--shadow-sm);
+}
+.leyenda-item { display: flex; align-items: center; gap: 6px; margin: 3px 0; }
+.leyenda-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* ---- Panel derecho: detalle del nodo ---- */
+.panel-detalle {
+  background: var(--color-surface);
+  border-left: 1px solid var(--color-border);
+  padding: 16px;
+  overflow-y: auto;
+}
+.panel-vacio { color: var(--color-text-muted); font-size: 13px; margin-top: 20px; text-align: center; }
+
+.panel-header { border-bottom: 1px solid var(--color-border); padding-bottom: 10px; margin-bottom: 10px; }
+.panel-badge {
+  display: inline-block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 2px 8px;
+  border-radius: 10px;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.panel-field { margin-bottom: 10px; }
+.panel-field-label { display: block; font-size: 11px; color: var(--color-text-muted); margin-bottom: 2px; }
+.panel-field-value { font-size: 13px; }
+.panel-field-vacio { color: #a3aab8; font-style: italic; }
+.panel-field-list { margin: 2px 0 0 16px; padding: 0; font-size: 13px; }
+
+/* Estado de carga / error genérico, usado por init-*.js */
+.estado-carga, .estado-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  background: rgba(238, 241, 246, 0.9);
+}
+.estado-error { color: #b02a2a; flex-direction: column; gap: 8px; text-align: center; padding: 20px; }

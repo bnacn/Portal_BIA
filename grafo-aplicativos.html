@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIA · Aplicativos ↔ Salidas</title>
+
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/graph-theme.css">
+<link rel="stylesheet" href="css/charts.css">
+
+<!-- Cytoscape.js (grafo de red) + D3 / d3-sankey (vista Sankey) vía CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-sankey/0.12.3/d3-sankey.min.js"></script>
+</head>
+<body>
+
+<header class="app-header">
+  <h1>Portal de Inteligencia del BIA — Gerencia de Operaciones</h1>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="guia.html">Guía de uso</a>
+    <a href="grafo-interdependencias.html">Interdependencias</a>
+    <a href="betweenness.html">Betweenness por Equipo</a>
+    <a href="grafo-aplicativos.html" class="activo">Aplicativos ↔ Salidas</a>
+    <a href="recursos-temporalidad.html">Temporalidad de Recursos</a>
+  </nav>
+</header>
+
+<div class="app-shell">
+
+  <!-- ===================== PANEL IZQUIERDO: FILTROS ===================== -->
+  <aside class="panel-filtros">
+    <h2>Filtros</h2>
+    <div id="filtros-container"><!-- lo arma FilterPanelBuilder --></div>
+  </aside>
+
+  <!-- ===================== CENTRO: GRAFO ===================== -->
+  <main class="panel-grafo">
+    <div class="toolbar-grafo">
+      <input type="text" id="input-buscar" class="buscador" placeholder="Buscar nodo por nombre…">
+
+      <span class="separador"></span>
+
+      <button data-layout="cose" class="activo" title="Layout de fuerzas">Force</button>
+      <button data-layout="sankey" title="Diagrama de flujo Sankey">Sankey</button>
+      <button data-layout="concentric" title="Layout concéntrico">Concentric</button>
+      <button data-layout="circle" title="Layout circular">Circle</button>
+
+      <select id="sankey-uo-select" style="display:none;max-width:220px;" title="Elegí una Unidad Organizativa para el Sankey">
+        <!-- opciones armadas por JS: por defecto una sola UO, para que sea legible -->
+      </select>
+
+      <span class="separador"></span>
+
+      <button id="btn-zoom-in" title="Acercar">＋</button>
+      <button id="btn-zoom-out" title="Alejar">－</button>
+      <button id="btn-fit" title="Ajustar a pantalla">Ajustar</button>
+      <button id="btn-labels" class="activo" title="Mostrar/ocultar etiquetas">Etiquetas</button>
+
+      <label style="display:flex;align-items:center;gap:4px;margin:0 4px;">
+        <input type="checkbox" id="chk-aislados" checked> Ocultar aislados
+      </label>
+
+      <span class="separador"></span>
+
+      <button id="btn-exportar" title="Exportar como imagen PNG">Exportar imagen</button>
+
+      <span id="contador-elementos" style="margin-left:auto;font-size:12px;color:var(--color-text-muted);"></span>
+    </div>
+
+    <div id="cy-container"></div>
+    <div id="sankey-container" class="chart-container" style="display:none;"></div>
+
+    <div class="leyenda" id="leyenda-red">
+      <div class="leyenda-item"><span class="leyenda-dot tipo-salida"></span> Salida (círculo)</div>
+      <div class="leyenda-item"><span class="leyenda-dot tipo-aplicativo"></span> Aplicativo (rombo)</div>
+    </div>
+    <div class="leyenda" id="leyenda-sankey" style="display:none;">
+      <div class="leyenda-item"><span class="leyenda-dot tipo-salida"></span> Salida</div>
+      <div class="leyenda-item"><span class="leyenda-dot tipo-aplicativo"></span> Aplicativo</div>
+      <div class="leyenda-item" style="margin-top:4px;color:var(--color-text-muted);">Grosor del flujo = cantidad de relaciones. Por defecto se muestra una sola Unidad Organizativa para que sea legible — elegí "Todas las UO" en el desplegable si querés complejizar la vista.</div>
+    </div>
+
+    <div id="estado-carga" class="estado-carga">Cargando datos del BIA…</div>
+    <div id="estado-error" class="estado-error" style="display:none;">
+      <strong>No se pudo cargar el grafo</strong>
+      <span class="mensaje-error"></span>
+    </div>
+  </main>
+
+  <!-- ===================== PANEL DERECHO: DETALLE ===================== -->
+  <aside class="panel-detalle" id="panel-detalle-body">
+    <div class="panel-vacio"><p>Seleccioná un nodo del grafo para ver su detalle acá.</p></div>
+  </aside>
+
+</div>
+
+<!-- Motor genérico (no se modifica por grafo) -->
+<script src="js/core/data-loader.js"></script>
+<script src="js/core/graph-engine.js"></script>
+<script src="js/core/filter-engine.js"></script>
+<script src="js/core/filter-panel-builder.js"></script>
+<script src="js/core/sidebar-panel.js"></script>
+<script src="js/core/search.js"></script>
+<script src="js/core/sankey-render.js"></script>
+
+<!-- Config + arranque específicos de este grafo -->
+<script src="js/configs/graph-aplicativos.config.js"></script>
+<script src="js/pages/init-grafo-aplicativos.js"></script>
+
+</body>
+</html>
