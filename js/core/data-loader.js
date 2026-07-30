@@ -13,28 +13,53 @@
  *   Nodo:  { id, type, label, data }
  *   Arista: { id, type, source, target, directed, data }
  *
- * IMPORTANTE: por el uso de fetch(), este portal debe servirse por http(s)
- * (GitHub Pages lo hace automáticamente). Si lo abrís como archivo local
- * (file://) el navegador bloquea fetch() por CORS; para probar en local
- * corré, por ejemplo: `python3 -m http.server 8000` desde la raíz del proyecto.
+ * CAMBIO IMPORTANTE: los datos ya no viven en /data del repo (por
+ * seguridad, se sacaron del historial de git). Ahora se piden a la API
+ * protegida (Cloudflare Worker + Access), que exige login con email
+ * @bna.com.ar antes de devolver cualquier dato. Las configs (js/configs/*)
+ * y los init-*.js siguen escribiendo rutas tipo "data/nodes-salidas.json"
+ * sin saber nada de esto — fetchJson() las traduce acá abajo, en el único
+ * lugar del código que sabe de dónde vienen realmente los datos.
  */
-
+ 
 const DataLoader = (() => {
+  // URL del Worker que sirve los datos protegidos. Ajustar si el
+  // Worker se renombra o se cambia de cuenta/subdominio.
+  const WORKER_BASE_URL = 'https://bia-api.cfranco-0ba.workers.dev';
+ 
   /**
-   * Descarga un único archivo JSON.
-   * @param {string} path - ruta relativa al archivo (ej. "data/nodes-salidas.json")
+   * Traduce una ruta local histórica ("data/nodes-salidas.json") a la
+   * URL real de la API protegida ("<worker>/api/data/nodes-salidas").
+   */
+  function resolveUrl(path) {
+    const clave = path.replace(/^.*data\//, '').replace(/\.json$/, '');
+    return `${WORKER_BASE_URL}/api/data/${clave}`;
+  }
+ 
+  /**
+   * Descarga un único archivo JSON desde la API protegida.
+   * @param {string} path - ruta relativa histórica (ej. "data/nodes-salidas.json")
    * @returns {Promise<any>}
    */
   async function fetchJson(path) {
-    const res = await fetch(path, { cache: 'no-cache' });
+    const url = resolveUrl(path);
+    const res = await fetch(url, {
+      cache: 'no-cache',
+      credentials: 'include', // manda la cookie de sesión de Cloudflare Access
+    });
+    if (res.status === 401 || res.status === 403) {
+      throw new Error(
+        `No autorizado para acceder a "${path}". Iniciá sesión con tu email ` +
+        `@bna.com.ar en la pantalla de login que debería haber aparecido, o ` +
+        `recargá la página si ya iniciaste sesión.`
+      );
+    }
     if (!res.ok) {
-      throw new Error(`No se pudo cargar "${path}" (HTTP ${res.status}). ` +
-        `Verificá que el archivo exista en /data y que estés sirviendo el ` +
-        `portal por http(s), no abriendo el .html directamente.`);
+      throw new Error(`No se pudo cargar "${path}" (HTTP ${res.status}).`);
     }
     return res.json();
   }
-
+ 
   /**
    * Valida que un array de nodos cumpla el contrato mínimo.
    * Lanza un error descriptivo (no silencioso) si algo no cierra: preferimos
@@ -54,7 +79,7 @@ const DataLoader = (() => {
       ids.add(n.id);
     });
   }
-
+ 
   /**
    * Valida aristas y avisa (sin frenar la carga) si source/target no existen
    * dentro del conjunto de nodos ya cargado, para detectar referencias rotas
@@ -81,7 +106,7 @@ const DataLoader = (() => {
       }
     });
   }
-
+ 
   /**
    * Carga el conjunto completo de datos de un grafo a partir de su config.
    * @param {object} graphConfig - ver js/configs/*.config.js
@@ -89,19 +114,19 @@ const DataLoader = (() => {
    */
   async function loadGraphData(graphConfig) {
     const { nodeSources, edgeSources } = graphConfig.dataSources;
-
+ 
     // Carga en paralelo de todos los archivos de nodos y de aristas declarados.
     const nodeArrays = await Promise.all(nodeSources.map((path) => fetchJson(path)));
     const edgeArrays = await Promise.all(edgeSources.map((path) => fetchJson(path)));
-
+ 
     let nodes = [];
     nodeArrays.forEach((arr, i) => {
       validateNodes(arr, nodeSources[i]);
       nodes = nodes.concat(arr);
     });
-
+ 
     const nodeIdSet = new Set(nodes.map((n) => n.id));
-
+ 
     let edges = [];
     edgeArrays.forEach((arr, i) => {
       validateEdges(arr, nodeIdSet, edgeSources[i]);
@@ -109,10 +134,10 @@ const DataLoader = (() => {
       const valid = arr.filter((e) => nodeIdSet.has(e.source) && nodeIdSet.has(e.target));
       edges = edges.concat(valid);
     });
-
+ 
     return { nodes, edges };
   }
-
+ 
   /**
    * Carga una tabla de dimensión "suelta" (no nodo/arista), por ejemplo
    * dim-rango-rto.json o dim-subproducto.json, usada por los filtros y
@@ -121,6 +146,7 @@ const DataLoader = (() => {
   async function loadDimension(path) {
     return fetchJson(path);
   }
-
+ 
   return { loadGraphData, loadDimension, fetchJson };
 })();
+ 
