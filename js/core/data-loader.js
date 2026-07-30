@@ -25,7 +25,7 @@
 const DataLoader = (() => {
   // URL del Worker que sirve los datos protegidos. Ajustar si el
   // Worker se renombra o se cambia de cuenta/subdominio.
-  const WORKER_BASE_URL = 'https://bia-api.cfranco-0ba.workers.dev';
+  const WORKER_BASE_URL = 'https://bia-api.bna-continuidad.workers.dev';
 
   /**
    * Traduce una ruta local histórica ("data/nodes-salidas.json") a la
