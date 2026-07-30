@@ -21,12 +21,12 @@
  * sin saber nada de esto — fetchJson() las traduce acá abajo, en el único
  * lugar del código que sabe de dónde vienen realmente los datos.
  */
- 
+
 const DataLoader = (() => {
   // URL del Worker que sirve los datos protegidos. Ajustar si el
   // Worker se renombra o se cambia de cuenta/subdominio.
   const WORKER_BASE_URL = 'https://bia-api.cfranco-0ba.workers.dev';
- 
+
   /**
    * Traduce una ruta local histórica ("data/nodes-salidas.json") a la
    * URL real de la API protegida ("<worker>/api/data/nodes-salidas").
@@ -35,7 +35,24 @@ const DataLoader = (() => {
     const clave = path.replace(/^.*data\//, '').replace(/\.json$/, '');
     return `${WORKER_BASE_URL}/api/data/${clave}`;
   }
- 
+
+  /**
+   * Si el fetch falla en seco (típico cuando todavía no hay sesión de
+   * Access en el dominio del Worker: un fetch en segundo plano no puede
+   * mostrar la pantalla de login), llevamos a la persona a loguearse con
+   * una navegación real, y el propio Worker la trae de vuelta a esta
+   * página después. Usamos "authRetry" para no quedar en loop si por
+   * algún motivo el problema no era de sesión.
+   */
+  function irALoginYVolver() {
+    const yaReintentado = new URLSearchParams(location.search).has('authRetry');
+    if (yaReintentado) return false;
+    const separador = location.href.includes('?') ? '&' : '?';
+    const volverA = location.href + separador + 'authRetry=1';
+    location.href = `${WORKER_BASE_URL}/api/login?return=${encodeURIComponent(volverA)}`;
+    return true;
+  }
+
   /**
    * Descarga un único archivo JSON desde la API protegida.
    * @param {string} path - ruta relativa histórica (ej. "data/nodes-salidas.json")
@@ -43,10 +60,22 @@ const DataLoader = (() => {
    */
   async function fetchJson(path) {
     const url = resolveUrl(path);
-    const res = await fetch(url, {
-      cache: 'no-cache',
-      credentials: 'include', // manda la cookie de sesión de Cloudflare Access
-    });
+    let res;
+    try {
+      res = await fetch(url, {
+        cache: 'no-cache',
+        credentials: 'include', // manda la cookie de sesión de Cloudflare Access
+      });
+    } catch (err) {
+      if (irALoginYVolver()) {
+        // La página está navegando afuera; no hace falta seguir.
+        return new Promise(() => {});
+      }
+      throw new Error(
+        `No se pudo conectar con la API de datos. Si ya iniciaste sesión y ` +
+        `seguís viendo esto, recargá la página o avisale a Carlos.`
+      );
+    }
     if (res.status === 401 || res.status === 403) {
       throw new Error(
         `No autorizado para acceder a "${path}". Iniciá sesión con tu email ` +
@@ -59,7 +88,7 @@ const DataLoader = (() => {
     }
     return res.json();
   }
- 
+
   /**
    * Valida que un array de nodos cumpla el contrato mínimo.
    * Lanza un error descriptivo (no silencioso) si algo no cierra: preferimos
@@ -79,7 +108,7 @@ const DataLoader = (() => {
       ids.add(n.id);
     });
   }
- 
+
   /**
    * Valida aristas y avisa (sin frenar la carga) si source/target no existen
    * dentro del conjunto de nodos ya cargado, para detectar referencias rotas
@@ -106,7 +135,7 @@ const DataLoader = (() => {
       }
     });
   }
- 
+
   /**
    * Carga el conjunto completo de datos de un grafo a partir de su config.
    * @param {object} graphConfig - ver js/configs/*.config.js
@@ -114,19 +143,19 @@ const DataLoader = (() => {
    */
   async function loadGraphData(graphConfig) {
     const { nodeSources, edgeSources } = graphConfig.dataSources;
- 
+
     // Carga en paralelo de todos los archivos de nodos y de aristas declarados.
     const nodeArrays = await Promise.all(nodeSources.map((path) => fetchJson(path)));
     const edgeArrays = await Promise.all(edgeSources.map((path) => fetchJson(path)));
- 
+
     let nodes = [];
     nodeArrays.forEach((arr, i) => {
       validateNodes(arr, nodeSources[i]);
       nodes = nodes.concat(arr);
     });
- 
+
     const nodeIdSet = new Set(nodes.map((n) => n.id));
- 
+
     let edges = [];
     edgeArrays.forEach((arr, i) => {
       validateEdges(arr, nodeIdSet, edgeSources[i]);
@@ -134,10 +163,10 @@ const DataLoader = (() => {
       const valid = arr.filter((e) => nodeIdSet.has(e.source) && nodeIdSet.has(e.target));
       edges = edges.concat(valid);
     });
- 
+
     return { nodes, edges };
   }
- 
+
   /**
    * Carga una tabla de dimensión "suelta" (no nodo/arista), por ejemplo
    * dim-rango-rto.json o dim-subproducto.json, usada por los filtros y
@@ -146,7 +175,6 @@ const DataLoader = (() => {
   async function loadDimension(path) {
     return fetchJson(path);
   }
- 
+
   return { loadGraphData, loadDimension, fetchJson };
 })();
- 
